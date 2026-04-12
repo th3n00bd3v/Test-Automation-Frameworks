@@ -1,0 +1,38 @@
+# Testing framework
+pytest==8.2.2
+pluggy==1.5.0
+iniconfig==2.0.0
+
+# Allure reporting
+allure-pytest==2.13.5
+allure-python-commons==2.13.5
+
+# Selenium stack
+selenium==4.21.0
+webdriver-manager==4.0.1
+
+# HTTP stack
+requests==2.31.0
+urllib3==2.2.1
+certifi==2024.2.2
+charset-normalizer==3.3.2
+idna==3.6
+
+# Utilities
+attrs==23.2.0
+packaging==24.0
+pyparsing==3.1.2
+six==1.16.0
+
+# CLI / output helpers
+colorama==0.4.6
+wcwidth==0.2.13
+
+# File/config handling
+toml==0.10.2
+
+# Excel support
+xlrd==2.0.1
+
+# Optional but commonly needed
+python-dotenv==1.0.1

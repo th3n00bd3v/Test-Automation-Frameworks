@@ -1,0 +1,15 @@
+# Compiled files
+/__pycache__/
+tests/__pycache__/
+registration/__pycache__/
+*.pyc
+
+# Virtual Environment
+setup/selenium-tests
+
+# Drivers
+setup/geckodriver/
+*.exe
+
+# Test Data files
+test data/registered_users.json
