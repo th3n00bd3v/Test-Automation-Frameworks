@@ -1,4 +1,4 @@
-## Automation Scripts
+## Automation Frameworks
 
 A repository for tracking practice automation scripts in JavaScript and Python.
 
