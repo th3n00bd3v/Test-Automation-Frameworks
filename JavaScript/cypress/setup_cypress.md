@@ -1,5 +1,6 @@
 ## Cypress - JavaScript
 
+This script is to demonstrate Cypress tests for multiple testing sites.
 
 ### Installation and Setup
 1. Open the terminal/VSCode CLI, and enter the command `npm install cypress --save-dev`. Following package managers are supported as of date:
