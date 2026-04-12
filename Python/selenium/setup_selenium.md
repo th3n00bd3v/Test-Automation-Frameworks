@@ -8,7 +8,7 @@ A basic enterprise-level test-data driven test suite for the web app 'https://ea
 System: Windows
 Python version: 3.14 or higher
 ``` 
-1. Go to `selenium-python/setup` and create venv using command: `python -m venv {venv_name}` from Terminal or VSCode CLI.
+1. Go to `setup` directory, and create venv using command: `python -m venv {venv_name}` from Terminal or VSCode CLI.
 2. To activate the virtual environment, type the command from the folder: `myenv\Scripts\activate`
 3. Once done, the CLI will show `({venv_name})` in the CLI prompt.
 4. Install required dependencies via the command `pip install -r requirements.txt` where `requirements.txt` contains the list of modules/packages to be installed.
