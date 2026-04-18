@@ -1,5 +1,4 @@
 # node modules and other files
 
 node_modules/
-package-lock.json
 yarn.lock

@@ -18,6 +18,17 @@ def get_data_file_path():
         os.makedirs(folder_path)
     return os.path.join(folder_path, "registered_users.json")
 
+def get_employee_ids_file_path():
+    """Returns the path to the employee_ids.json in the 'test data' folder."""
+    folder_path = os.path.join(get_project_root(), "test data")
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    file_path = os.path.join(folder_path, "employee_ids.json")
+    if not os.path.exists(file_path):
+        with open(file_path, "w") as f:
+            json.dump([], f, indent=4)
+    return file_path
+
 def generate_user_payload():
     """Creates randomized user data for registration."""
     uid = str(uuid.uuid4())[:8]
@@ -52,3 +63,29 @@ def get_latest_user():
     with open(file_path, "r") as f:
         users = json.load(f)
         return users[-1]
+
+def save_employee_ids(employee_ids):
+    """Stores the employee IDs collected from the Employees page."""
+    file_path = get_employee_ids_file_path()
+    with open(file_path, "w") as f:
+        json.dump(employee_ids, f, indent=4)
+
+def load_employee_ids():
+    """Loads previously stored employee IDs from JSON."""
+    file_path = get_employee_ids_file_path()
+    if not os.path.exists(file_path):
+        return []
+
+    with open(file_path, "r") as f:
+        try:
+            employee_ids = json.load(f)
+        except json.JSONDecodeError:
+            return []
+
+    return employee_ids if isinstance(employee_ids, list) else []
+
+def get_random_employee_id():
+    employee_ids = load_employee_ids()
+    if not employee_ids:
+        return None
+    return random.choice(employee_ids)

@@ -1,6 +1,7 @@
 import sys
 import os
 import time
+import random
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -11,7 +12,29 @@ from webdriver_manager.firefox import GeckoDriverManager
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
 
 # Import helper functions
-from utils.data_helper import BASE_URL, get_latest_user
+from utils.data_helper import (
+    BASE_URL,
+    get_latest_user,
+    get_random_employee_id,
+    save_employee_ids,
+)
+
+def fetch_employee_ids_from_page(wait):
+    """Collect employee IDs from the Details links shown on the Employees page."""
+    detail_links = wait.until(
+        EC.presence_of_all_elements_located(
+            (By.CSS_SELECTOR, "a.btn-detail[href*='/EmployeeDetails/Index/']")
+        )
+    )
+
+    employee_ids = []
+    for link in detail_links:
+        href = link.get_attribute("href")
+        match = re.search(r"/EmployeeDetails/Index/(\d+)", href)
+        if match:
+            employee_ids.append(match.group(1))
+
+    return employee_ids
 
 def dashboard_navigation():
    
@@ -54,6 +77,7 @@ def dashboard_navigation():
         else:
             print("[FAIL] Login failed. 'Log off' link not detected.")
 
+        
         # Access employees dashboard
         
         employees = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@href,'Employee')]")))
@@ -61,9 +85,37 @@ def dashboard_navigation():
         
         time.sleep(2)
         
-        # Scroll to bottom of the page to ensure list is loaded
+        ## Load employee ID from JSON or store first and load it 
         
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        selected_employee_id = get_random_employee_id()
+        
+        
+        if selected_employee_id:
+            print(f"[INFO] Using cached employee ID from JSON: {selected_employee_id}")
+            driver.get(f"{BASE_URL}EmployeeDetails/Index/{selected_employee_id}")
+        else:
+            print("[INFO] Employee ID cache not found. Fetching employee IDs from Employees page.")
+
+            employees = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@href,'Employee')]")))
+            employees.click()
+            time.sleep(2)
+
+            employee_ids = fetch_employee_ids_from_page(wait)
+            if not employee_ids:
+                raise Exception("No employee detail links were found on the Employees page.")
+
+            save_employee_ids(employee_ids)
+            print(f"[INFO] Stored employee IDs in JSON: {employee_ids}")
+
+            selected_employee_id = random.choice(employee_ids)
+            
+           # stored employee IDs in JSON: {employee_ids}")
+
+            selected_employee_id = employee_ids[0]
+            driver.get(f"{BASE_URL}EmployeeDetails/Index/{selected_employee_id}")
+
+        wait.until(EC.url_contains(f"/EmployeeDetails/Index/{selected_employee_id}"))
+        print(f"[PASS] Opened Employee Details page for employee ID: {selected_employee_id}")
         
     finally:
         time.sleep(2)
@@ -71,5 +123,3 @@ def dashboard_navigation():
 
 if __name__ == "__main__":
     dashboard_navigation() 
-        
-        
